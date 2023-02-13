@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.0.0...v1.0.1) (2023-02-13)
+
+
+### Bug Fixes
+
+* Resolve broken validation ([d31d95e](https://github.com/memes/terraform-google-restricted-apis-dns/commit/d31d95e7415ee1b9279f207915038f4e7a9e45f0)), closes [#2](https://github.com/memes/terraform-google-restricted-apis-dns/issues/2)
+
 ## 1.0.0 (2023-02-13)
 
 
