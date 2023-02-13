@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0 (2023-02-13)
+
+
+### Features
+
+* Restricted APIs DNS module ([c651625](https://github.com/memes/terraform-google-restricted-apis-dns/commit/c651625c80d3c350ce6b4442256f1fd73dcb6690))
+
+## Changelog
+
 <!-- markdownlint-disable MD024 -->
 
 All notable changes to this project will be documented in this file.
