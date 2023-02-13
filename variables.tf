@@ -36,7 +36,8 @@ variable "labels" {
   validation {
     # GCP resource labels must be lowercase alphanumeric, underscore or hyphen,
     # and the key must be <= 63 characters in length
-    condition = length(compact([for k, v in var.labels : can(regex("^[a-z][a-z0-9_-]{0,62}$", k)) && can(regex("^[a-z0-9_-]{0,63}$", v)) ? "x" : ""])) == length(keys(var.labels))
+    condition     = length(compact([for k, v in var.labels : can(regex("^[a-z][a-z0-9_-]{0,62}$", k)) && can(regex("^[a-z0-9_-]{0,63}$", v)) ? "x" : ""])) == length(keys(var.labels))
+    error_message = "Each label key:value pair must match expectations."
   }
   default     = {}
   description = <<-EOD
@@ -48,7 +49,7 @@ variable "labels" {
 variable "network_self_links" {
   type = list(string)
   validation {
-    condition     = length(compact([for net in values(var.network_self_links) : can(regex("^(?:https://www.googleapis.com/compute/v1/)?projects/[a-z][a-z0-9-]{4,28}[a-z0-9]/global/networks/[a-z]([a-z0-9-]+[a-z0-9])?$", net)) ? "x" : ""])) == length(var.network_self_links)
+    condition     = length(compact([for net in var.network_self_links : can(regex("^(?:https://www.googleapis.com/compute/v1/)?projects/[a-z][a-z0-9-]{4,28}[a-z0-9]/global/networks/[a-z]([a-z0-9-]+[a-z0-9])?$", net)) ? "x" : ""])) == length(var.network_self_links)
     error_message = "Each network_self_links value must be a fully-qualified self-link URI."
   }
   description = <<-EOD
