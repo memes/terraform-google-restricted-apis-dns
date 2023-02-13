@@ -17,7 +17,7 @@ locals {
 
 module "restrictedapis" {
   source                             = "terraform-google-modules/cloud-dns/google"
-  version                            = "4.1.0"
+  version                            = "4.2.1"
   project_id                         = var.project_id
   type                               = "private"
   name                               = format("%s-googleapis", var.name)
@@ -51,7 +51,7 @@ module "restrictedapis" {
 module "zones" {
   for_each                           = local.zones
   source                             = "terraform-google-modules/cloud-dns/google"
-  version                            = "4.1.0"
+  version                            = "4.2.1"
   project_id                         = var.project_id
   type                               = "private"
   name                               = each.key
