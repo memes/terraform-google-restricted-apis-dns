@@ -29,7 +29,7 @@ APIs to the `restricted.googleapis.com` private endpoints.
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "1.0.0"
+    version = "1.0.1"
     project_id = "my-project-id"
     network_self_links = [
         "projects/my-project-id/globals/network/my-network",
