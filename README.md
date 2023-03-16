@@ -7,12 +7,12 @@
 This Terraform module creates private Cloud DNS records that resolve Google Cloud
 APIs to the `restricted.googleapis.com` private endpoints.
 
-* A zone is created to override `*.googleapis.com` to `restricted.googleapis.com`
-  via `199.36.153.4/30`
+* A zone is created to override all `*.googleapis.com` entries by resolving to
+  `restricted.googleapis.com` via `199.36.153.4/30` and `2600:2d00:0002:1000::/64`.
   > NOTE: Private connectivity route to `199.36.153.4/30` is not managed by this
   > module; see [multi-region-private-network] for companion module
 * Additional domains are set through the `overrides` variable; by default the
-  `gcr.io` and `pkg.dev` domains for GCR and GAR are includes.
+  `gcr.io` and `pkg.dev` domains for GCR and GAR are included.
 
 ## Examples
 
@@ -29,8 +29,30 @@ APIs to the `restricted.googleapis.com` private endpoints.
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "1.0.1"
+    version = "1.1.0"
     project_id = "my-project-id"
+    network_self_links = [
+        "projects/my-project-id/globals/network/my-network",
+    ]
+}
+```
+
+### Disable restricted override for Container Registry and Artifact Registry
+
+|Item|Managed by module|Description|
+|----|-----------------|-----------|
+|Override googleapis.com|&check;|Always directed to `restricted.googleapis.com`|
+|Override gcr.io||Setting `overrides` to []|
+|Override pkg.dev||Setting `overrides` to []|
+|Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
+|Route to private endpoints||Must be managed per-VPC|
+
+```hcl
+module "restricted_apis" {
+    source  = "memes/restricted-apis-dns/google"
+    version = "1.1.0"
+    project_id = "my-project-id"
+    overrides = []
     network_self_links = [
         "projects/my-project-id/globals/network/my-network",
     ]
