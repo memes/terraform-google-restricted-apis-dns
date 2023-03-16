@@ -23,6 +23,6 @@ inputs:
   - name: output_labels_json
     type: string
     required: true
-  - name: output_network_self_link
+  - name: output_network_self_links_json
     type: string
     required: true

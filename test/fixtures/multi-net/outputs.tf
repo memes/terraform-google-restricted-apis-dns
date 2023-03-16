@@ -1,5 +1,5 @@
 output "network_self_links_json" {
-  value = "[]"
+  value = jsonencode([google_compute_network.test1.self_link, google_compute_network.test2.self_link])
 }
 
 output "overrides_json" {

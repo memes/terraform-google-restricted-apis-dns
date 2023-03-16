@@ -31,6 +31,16 @@ platforms:
       variables:
         name: restricted-apis-labels
         labels: '{scenario=\"labels\"}'
+  - name: single-net
+    driver:
+      root_module_directory: test/fixtures/single-net
+      variables:
+        name: restricted-apis-single-net
+  - name: multi-net
+    driver:
+      root_module_directory: test/fixtures/multi-net
+      variables:
+        name: restricted-apis-multi-net
 
 suites:
   - name: restricted-apis-dns
