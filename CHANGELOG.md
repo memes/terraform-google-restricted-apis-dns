@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.0.1...v1.1.0) (2023-03-16)
+
+
+### Features
+
+* IPv6 support for restricted.googleapis.com ([6f39d04](https://github.com/memes/terraform-google-restricted-apis-dns/commit/6f39d0472823ddbdc3f252d94bb0ca5424dd1e79))
+
 ## [1.0.1](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.0.0...v1.0.1) (2023-02-13)
 
 
