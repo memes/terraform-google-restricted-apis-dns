@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.1.0...v1.1.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* Add description to overrides input ([87db263](https://github.com/memes/terraform-google-restricted-apis-dns/commit/87db263d643fa90387b19bb082309c93b7d998b6))
+
 ## [1.1.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.0.1...v1.1.0) (2023-03-16)
 
 
