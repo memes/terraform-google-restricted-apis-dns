@@ -29,6 +29,11 @@ variable "overrides" {
     "gcr.io",
     "pkg.dev",
   ]
+  description = <<-EOD
+  A list of additional Google Cloud endpoint domains that should be forced to
+  resolve through restricted.googleapis.com. These must be compatible with VPC
+  Service Controls. Default value will allow restricted access to GCR and GAR.
+  EOD
 }
 
 variable "labels" {

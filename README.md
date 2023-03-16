@@ -87,7 +87,7 @@ No resources.
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project identifier where the Cloud DNS resources will be created. | `string` | n/a | yes |
 | <a name="input_labels"></a> [labels](#input\_labels) | An optional map of key:value labels to apply to the resources. Default value<br>is an empty map. | `map(string)` | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name to use when naming resources managed by this module. Must be RFC1035<br>compliant and between 1 and 52 characters in length, inclusive. | `string` | `"restricted"` | no |
-| <a name="input_overrides"></a> [overrides](#input\_overrides) | n/a | `list(string)` | <pre>[<br>  "gcr.io",<br>  "pkg.dev"<br>]</pre> | no |
+| <a name="input_overrides"></a> [overrides](#input\_overrides) | A list of additional Google Cloud endpoint domains that should be forced to<br>resolve through restricted.googleapis.com. These must be compatible with VPC<br>Service Controls. Default value will allow restricted access to GCR and GAR. | `list(string)` | <pre>[<br>  "gcr.io",<br>  "pkg.dev"<br>]</pre> | no |
 
 ## Outputs
 
