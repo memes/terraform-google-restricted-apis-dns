@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.1.1...v1.2.0) (2023-03-16)
+
+
+### Features
+
+* Remove Google DNS module from solution ([0dba3c3](https://github.com/memes/terraform-google-restricted-apis-dns/commit/0dba3c30667b5d9a4d2c85188ec71effc32e7f9a))
+
 ## [1.1.1](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.1.0...v1.1.1) (2023-03-16)
 
 
