@@ -1,0 +1,36 @@
+#
+---
+driver:
+  name: terraform
+  command_timeout: 600
+  verify_version: true
+  root_module_directory: test/fixtures/root
+
+provisioner:
+  name: terraform
+
+verifier:
+  name: terraform
+  color: true
+  systems:
+    - name: google
+      backend: gcp
+
+platforms:
+  - name: default
+    driver:
+      variables:
+        name: restricted-apis-default
+  - name: no-overrides
+    driver:
+      variables:
+        name: restricted-apis-no-overrides
+        overrides: '[]'
+  - name: labels
+    driver:
+      variables:
+        name: restricted-apis-labels
+        labels: '{scenario=\"labels\"}'
+
+suites:
+  - name: restricted-apis-dns
