@@ -4,8 +4,8 @@
 ![Maintenance](https://img.shields.io/maintenance/yes/2023)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-This Terraform module creates private Cloud DNS records that resolve Google Cloud
-APIs to the `restricted.googleapis.com` private endpoints.
+This Terraform module creates opinionated private Cloud DNS records that resolve
+Google Cloud API endpoints to the `restricted.googleapis.com` endpoints.
 
 * A zone is created to override all `*.googleapis.com` entries by resolving to
   `restricted.googleapis.com` via `199.36.153.4/30` and `2600:2d00:0002:1000::/64`.
@@ -13,6 +13,16 @@ APIs to the `restricted.googleapis.com` private endpoints.
   > module; see [multi-region-private-network] for companion module
 * Additional domains are set through the `overrides` variable; by default the
   `gcr.io` and `pkg.dev` domains for GCR and GAR are included.
+
+## Opinions
+
+1. `A` and `AAAA` records will **always** be created
+2. All endpoints matching `*.googleapis.com` will resolve to `restricted.googleapis.com`
+
+> NOTE: The intent of this module is to easily repeat a common use-case where
+> all Google Cloud endpoints must resolve to `restricted.googleapis.com`. It is
+> not a general purpose Cloud DNS module; use Google's [cloud-ds] module for that
+> purpose.
 
 ## Examples
 
@@ -70,14 +80,20 @@ module "restricted_apis" {
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_restrictedapis"></a> [restrictedapis](#module\_restrictedapis) | terraform-google-modules/cloud-dns/google | 4.1.0 |
-| <a name="module_zones"></a> [zones](#module\_zones) | terraform-google-modules/cloud-dns/google | 4.1.0 |
+No modules.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [google_dns_managed_zone.googleapis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_managed_zone) | resource |
+| [google_dns_managed_zone.overrides](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_managed_zone) | resource |
+| [google_dns_record_set.googleapis_a](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
+| [google_dns_record_set.googleapis_aaaa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
+| [google_dns_record_set.googleapis_cname](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
+| [google_dns_record_set.overrides_a](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
+| [google_dns_record_set.overrides_aaaa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
+| [google_dns_record_set.overrides_cname](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/dns_record_set) | resource |
 
 ## Inputs
 
@@ -96,3 +112,4 @@ No outputs.
 <!-- markdownlint-enable MD033 MD034 -->
 
 [multi-region-private-network]: https://registry.terraform.io/modules/memes/multi-region-private-network/google/latest?tab=readme
+[cloud-dns]: https://registry.terraform.io/modules/terraform-google-modules/cloud-dns/google/4latest?tab=readme

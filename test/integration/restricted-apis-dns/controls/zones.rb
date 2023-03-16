@@ -19,12 +19,13 @@ control 'googleapis' do
     its('visibility') { should cmp 'private' }
     its('labels') { should cmp labels }
     its('private_visibility_config') { should_not be_nil }
-    if network_self_links.empty?
-      its('private_visibility_config.networks') { should be_empty }
-    else
-      its('private_visibility_config.networks') { should_not be_empty }
+    if network_self_links.count.positive?
       describe resource.private_visibility_config.networks.map(&:network_url).sort do
         it { should cmp network_self_links }
+      end
+    else
+      describe resource.private_visibility_config do
+        its('networks') { should be_nil }
       end
     end
   end
@@ -56,12 +57,13 @@ control 'overrides' do
       its('visibility') { should cmp 'private' }
       its('labels') { should cmp labels }
       its('private_visibility_config') { should_not be_nil }
-      if network_self_links.empty?
-        its('private_visibility_config.networks') { should be_empty }
-      else
-        its('private_visibility_config.networks') { should_not be_empty }
+      if network_self_links.count.positive?
         describe resource.private_visibility_config.networks.map(&:network_url).sort do
           it { should cmp network_self_links }
+        end
+      else
+        describe resource.private_visibility_config do
+          its('networks') { should be_nil }
         end
       end
     end
