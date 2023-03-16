@@ -39,7 +39,7 @@ Google Cloud API endpoints to the `restricted.googleapis.com` endpoints.
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "1.1.0"
+    version = "1.2.0"
     project_id = "my-project-id"
     network_self_links = [
         "projects/my-project-id/globals/network/my-network",
@@ -60,7 +60,7 @@ module "restricted_apis" {
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "1.1.0"
+    version = "1.2.0"
     project_id = "my-project-id"
     overrides = []
     network_self_links = [
