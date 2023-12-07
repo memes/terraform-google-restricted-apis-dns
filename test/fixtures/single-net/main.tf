@@ -19,4 +19,5 @@ module "test" {
   network_self_links = [
     google_compute_network.test.self_link,
   ]
+  use_private_access_endpoints = var.use_private_access_endpoints
 }

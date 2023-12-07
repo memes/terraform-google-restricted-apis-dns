@@ -63,3 +63,13 @@ variable "network_self_links" {
   associated with the VPCs outside this module.
   EOD
 }
+
+variable "use_private_access_endpoints" {
+  type        = bool
+  default     = false
+  description = <<-EOD
+  Add Cloud DNS entries that resolve to the private.googleapis.com endpoints instead of restricted.googleapis.com. Use
+  this when creating VPCs which require private Google APIs access but for which the restricted endpoints are not
+  supported for target GCP services.
+  EOD
+}

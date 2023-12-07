@@ -5,11 +5,12 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 This Terraform module creates opinionated private Cloud DNS records that resolve
-Google Cloud API endpoints to the `restricted.googleapis.com` endpoints.
+Google Cloud API endpoints to the `restricted.googleapis.com` or `private.googleapis.com` endpoints.
 
 * A zone is created to override all `*.googleapis.com` entries by resolving to
-  `restricted.googleapis.com` via `199.36.153.4/30` and `2600:2d00:0002:1000::/64`.
-  > NOTE: Private connectivity route to `199.36.153.4/30` is not managed by this
+   * `restricted.googleapis.com` via `199.36.153.4/30` and `2600:2d00:0002:1000::/64`, or
+   * `private.googleapis.com` via `199.36.153.8/30` and `2600:2d00:002:2000::/64`
+  > NOTE: Private connectivity route to `199.36.153.4/30` or `199.36.153.8/30` is not managed by this
   > module; see [multi-region-private-network] for companion module
 * Additional domains are set through the `overrides` variable; by default the
   `gcr.io` and `pkg.dev` domains for GCR and GAR are included.
@@ -17,16 +18,15 @@ Google Cloud API endpoints to the `restricted.googleapis.com` endpoints.
 ## Opinions
 
 1. `A` and `AAAA` records will **always** be created
-2. All endpoints matching `*.googleapis.com` will resolve to `restricted.googleapis.com`
-
+2. All endpoints matching `*.googleapis.com` will resolve to `restricted.googleapis.com` (or `private.googleapis.com` if `use_private_access_endpoints` variable is `true`.
 > NOTE: The intent of this module is to easily repeat a common use-case where
-> all Google Cloud endpoints must resolve to `restricted.googleapis.com`. It is
-> not a general purpose Cloud DNS module; use Google's [cloud-ds] module for that
+> all Google Cloud endpoints must resolve to `restricted.googleapis.com` or `private.googleapis.com`. It is
+> not a general purpose Cloud DNS module; use Google's [cloud-dns] module for that
 > purpose.
 
 ## Examples
 
-### Enable standard overrides
+### Default use-case
 
 |Item|Managed by module|Description|
 |----|-----------------|-----------|
@@ -39,7 +39,7 @@ Google Cloud API endpoints to the `restricted.googleapis.com` endpoints.
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "1.2.0"
+    version = "1.3.0"
     project_id = "my-project-id"
     network_self_links = [
         "projects/my-project-id/globals/network/my-network",
@@ -60,9 +60,59 @@ module "restricted_apis" {
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "1.2.0"
+    version = "1.3.0"
     project_id = "my-project-id"
     overrides = []
+    network_self_links = [
+        "projects/my-project-id/globals/network/my-network",
+    ]
+}
+```
+
+### Enable private access overrides
+
+|Item|Managed by module|Description|
+|----|-----------------|-----------|
+|Override googleapis.com|&check;|Always directed to `private.googleapis.com`|
+|Override gcr.io|&check;|Default `overrides` value will direct to `private.googleapis.com`|
+|Override pkg.dev|&check;|Default `overrides` value will direct to `private.googleapis.com`|
+|Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
+|Route to private endpoints||Must be managed per-VPC|
+
+```hcl
+module "private_apis" {
+    source  = "memes/restricted-apis-dns/google"
+    version = "1.3.0"
+    project_id = "my-project-id"
+    use_private_access_endpoints = true
+    network_self_links = [
+        "projects/my-project-id/globals/network/my-network",
+    ]
+}
+```
+
+### Enable private access with support for Cloud Functions
+
+|Item|Managed by module|Description|
+|----|-----------------|-----------|
+|Override googleapis.com|&check;|Always directed to `private.googleapis.com`|
+|Override gcr.io|&check;|Explicit `overrides` value will direct to `private.googleapis.com`|
+|Override pkg.dev|&check;|Explicit `overrides` value will direct to `private.googleapis.com`|
+|Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
+|Route to private endpoints||Must be managed per-VPC|
+|Override cloudfunctions.net|&check;|Explicit `overrides` value will direct to `private.googleapis.com`|
+
+```hcl
+module "private_apis" {
+    source  = "memes/restricted-apis-dns/google"
+    version = "1.3.0"
+    project_id = "my-project-id"
+    use_private_access_endpoints = true
+    overrides = [
+        "gcr.io",
+        "pkg.dev",
+        "cloudfunctions.net",
+    ]
     network_self_links = [
         "projects/my-project-id/globals/network/my-network",
     ]
@@ -104,6 +154,7 @@ No modules.
 | <a name="input_labels"></a> [labels](#input\_labels) | An optional map of key:value labels to apply to the resources. Default value<br>is an empty map. | `map(string)` | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name to use when naming resources managed by this module. Must be RFC1035<br>compliant and between 1 and 52 characters in length, inclusive. | `string` | `"restricted"` | no |
 | <a name="input_overrides"></a> [overrides](#input\_overrides) | A list of additional Google Cloud endpoint domains that should be forced to<br>resolve through restricted.googleapis.com. These must be compatible with VPC<br>Service Controls. Default value will allow restricted access to GCR and GAR. | `list(string)` | <pre>[<br>  "gcr.io",<br>  "pkg.dev"<br>]</pre> | no |
+| <a name="input_use_private_access_endpoints"></a> [use\_private\_access\_endpoints](#input\_use\_private\_access\_endpoints) | Add Cloud DNS entries that resolve to the private.googleapis.com endpoints instead of restricted.googleapis.com. Use<br>this when creating VPCs which require private Google APIs access but for which the restricted endpoints are not<br>supported for target GCP services. | `bool` | `false` | no |
 
 ## Outputs
 

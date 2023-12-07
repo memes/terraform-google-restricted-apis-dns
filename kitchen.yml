@@ -41,6 +41,51 @@ platforms:
       root_module_directory: test/fixtures/multi-net
       variables:
         name: restricted-apis-multi-net
+  - name: null-private-access
+    driver:
+      root_module_directory: test/fixtures/null-private-access
+      variables:
+        name: restricted-apis-null-private-access
+  - name: private-minimal
+    driver:
+      variables:
+        name: private-apis-minimal
+        use_private_access_endpoints: 'true'
+  - name: private-no-overrides
+    driver:
+      variables:
+        name: private-apis-no-overrides
+        use_private_access_endpoints: 'true'
+        overrides: '[]'
+  - name: private-cloud-functions
+    driver:
+      variables:
+        name: private-apis-cloud-functions
+        use_private_access_endpoints: 'true'
+        overrides: '[\"cloudfunctions.net\"]'
+  - name: private-labels
+    driver:
+      variables:
+        name: private-apis-labels
+        use_private_access_endpoints: 'true'
+        labels: '{scenario=\"labels\"}'
+  - name: private-single-net
+    driver:
+      root_module_directory: test/fixtures/single-net
+      variables:
+        name: private-apis-single-net
+        use_private_access_endpoints: 'true'
+  - name: private-multi-net
+    driver:
+      root_module_directory: test/fixtures/multi-net
+      variables:
+        name: private-apis-multi-net
+        use_private_access_endpoints: 'true'
 
 suites:
   - name: restricted-apis-dns
+    excludes:
+      - /^private/
+  - name: private-apis-dns
+    includes:
+      - /^private/
