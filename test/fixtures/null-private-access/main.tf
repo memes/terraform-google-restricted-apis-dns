@@ -9,5 +9,5 @@ module "test" {
   overrides                    = var.overrides
   labels                       = var.labels
   network_self_links           = []
-  use_private_access_endpoints = var.use_private_access_endpoints
+  use_private_access_endpoints = null
 }

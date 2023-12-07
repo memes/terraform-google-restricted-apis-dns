@@ -18,8 +18,3 @@ variable "labels" {
   type    = map(string)
   default = {}
 }
-
-variable "use_private_access_endpoints" {
-  type    = bool
-  default = false
-}
