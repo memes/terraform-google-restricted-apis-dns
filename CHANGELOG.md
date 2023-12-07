@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.2.0...v1.3.0) (2023-12-07)
+
+
+### Features
+
+* Support Private Google API DNS entries ([769ca77](https://github.com/memes/terraform-google-restricted-apis-dns/commit/769ca77701f8701c139d0c8e4e2b97afddfd3d73)), closes [#41](https://github.com/memes/terraform-google-restricted-apis-dns/issues/41)
+
 ## [1.2.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.1.1...v1.2.0) (2023-03-16)
 
 
