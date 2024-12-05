@@ -120,7 +120,7 @@ module "private_apis" {
 ```
 
 <!-- markdownlint-disable MD033 MD034-->
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -149,17 +149,17 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_network_self_links"></a> [network\_self\_links](#input\_network\_self\_links) | Fully-qualified VPC network self-links to which the restricted APIs Cloud DNS<br>zones will be attached. If left empty, the Cloud DNS zones will need to be<br>associated with the VPCs outside this module. | `list(string)` | n/a | yes |
+| <a name="input_network_self_links"></a> [network\_self\_links](#input\_network\_self\_links) | Fully-qualified VPC network self-links to which the restricted APIs Cloud DNS<br/>zones will be attached. If left empty, the Cloud DNS zones will need to be<br/>associated with the VPCs outside this module. | `list(string)` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project identifier where the Cloud DNS resources will be created. | `string` | n/a | yes |
-| <a name="input_labels"></a> [labels](#input\_labels) | An optional map of key:value labels to apply to the resources. Default value<br>is an empty map. | `map(string)` | `{}` | no |
-| <a name="input_name"></a> [name](#input\_name) | The name to use when naming resources managed by this module. Must be RFC1035<br>compliant and between 1 and 52 characters in length, inclusive. | `string` | `"restricted"` | no |
-| <a name="input_overrides"></a> [overrides](#input\_overrides) | A list of additional Google Cloud endpoint domains that should be forced to<br>resolve through restricted.googleapis.com. These must be compatible with VPC<br>Service Controls. Default value will allow restricted access to GCR and GAR. | `list(string)` | <pre>[<br>  "gcr.io",<br>  "pkg.dev"<br>]</pre> | no |
-| <a name="input_use_private_access_endpoints"></a> [use\_private\_access\_endpoints](#input\_use\_private\_access\_endpoints) | Add Cloud DNS entries that resolve to the private.googleapis.com endpoints instead of restricted.googleapis.com. Use<br>this when creating VPCs which require private Google APIs access but for which the restricted endpoints are not<br>supported for target GCP services. | `bool` | `false` | no |
+| <a name="input_labels"></a> [labels](#input\_labels) | An optional map of key:value labels to apply to the resources. Default value<br/>is an empty map. | `map(string)` | `{}` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name to use when naming resources managed by this module. Must be RFC1035<br/>compliant and between 1 and 52 characters in length, inclusive. | `string` | `"restricted"` | no |
+| <a name="input_overrides"></a> [overrides](#input\_overrides) | A list of additional Google Cloud endpoint domains that should be forced to<br/>resolve through restricted.googleapis.com. These must be compatible with VPC<br/>Service Controls. Default value will allow restricted access to GCR and GAR. | `list(string)` | <pre>[<br/>  "gcr.io",<br/>  "pkg.dev"<br/>]</pre> | no |
+| <a name="input_use_private_access_endpoints"></a> [use\_private\_access\_endpoints](#input\_use\_private\_access\_endpoints) | Add Cloud DNS entries that resolve to the private.googleapis.com endpoints instead of restricted.googleapis.com. Use<br/>this when creating VPCs which require private Google APIs access but for which the restricted endpoints are not<br/>supported for target GCP services. | `bool` | `false` | no |
 
 ## Outputs
 
 No outputs.
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 <!-- markdownlint-enable MD033 MD034 -->
 
 [multi-region-private-network]: https://registry.terraform.io/modules/memes/multi-region-private-network/google/latest?tab=readme
