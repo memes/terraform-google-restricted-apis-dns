@@ -2,8 +2,11 @@
 ---
 driver:
   name: terraform
-  command_timeout: 600
   verify_version: true
+
+transport:
+  name: terraform
+  command_timeout: 600
   root_module_directory: test/fixtures/root
 
 provisioner:
