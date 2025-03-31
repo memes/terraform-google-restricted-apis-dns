@@ -24,16 +24,31 @@ platforms:
     driver:
       variables:
         name: restricted-apis-default
+  - name: description
+    driver:
+      variables:
+        name: restricted-apis-description
+        description: Test for restricted-apis DNS module
   - name: no-overrides
     driver:
       variables:
         name: restricted-apis-no-overrides
         overrides: '[]'
+  - name: null-overrides
+    driver:
+      variables:
+        name: restricted-apis-null-overrides
+        overrides: 'null'
   - name: labels
     driver:
       variables:
         name: restricted-apis-labels
         labels: '{scenario=\"labels\"}'
+  - name: null-labels
+    driver:
+      variables:
+        name: restricted-apis-null-labels
+        labels: 'null'
   - name: single-net
     driver:
       root_module_directory: test/fixtures/single-net
@@ -60,6 +75,12 @@ platforms:
         name: private-apis-no-overrides
         use_private_access_endpoints: 'true'
         overrides: '[]'
+  - name: private-null-overrides
+    driver:
+      variables:
+        name: private-apis-null-overrides
+        use_private_access_endpoints: 'true'
+        overrides: 'null'
   - name: private-cloud-functions
     driver:
       variables:
@@ -72,6 +93,12 @@ platforms:
         name: private-apis-labels
         use_private_access_endpoints: 'true'
         labels: '{scenario=\"labels\"}'
+  - name: private-null-labels
+    driver:
+      variables:
+        name: private-apis-null-labels
+        use_private_access_endpoints: 'true'
+        labels: 'null'
   - name: private-single-net
     driver:
       root_module_directory: test/fixtures/single-net
@@ -84,11 +111,21 @@ platforms:
       variables:
         name: private-apis-multi-net
         use_private_access_endpoints: 'true'
+  - name: custom-addresses
+    driver:
+      variables:
+        name: custom-addresses
+        addresses: '{ipv4=[\"10.10.10.10\"],ipv6=[\"fe00::10\"]}'
+  - name: custom-ipv4
+    driver:
+      variables:
+        name: custom-ipv4
+        addresses: '{ipv4=[\"10.10.10.10\"],ipv6=null}'
+  - name: custom-ipv6
+    driver:
+      variables:
+        name: custom-ipv6
+        addresses: '{ipv4=null,ipv6=[\"fe00::10\"]}'
 
 suites:
   - name: restricted-apis-dns
-    excludes:
-      - /^private/
-  - name: private-apis-dns
-    includes:
-      - /^private/

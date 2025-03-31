@@ -7,7 +7,17 @@ output "overrides_json" {
 }
 
 output "labels_json" {
-  value = jsonencode(merge({
-    module = "restricted-apis-dns"
-  }, var.labels))
+  value = jsonencode(var.labels)
+}
+
+output "addresses_json" {
+  value = jsonencode(null)
+}
+
+output "use_private_access_endpoints" {
+  value = null
+}
+
+output "description" {
+  value = "Override DNS entries for Google APIs access"
 }
