@@ -26,3 +26,9 @@ inputs:
   - name: output_network_self_links_json
     type: string
     required: true
+  - name: output_addresses_json
+    type: string
+    required: true
+  - name: output_use_private_access_endpoints
+    type: boolean
+    required: false

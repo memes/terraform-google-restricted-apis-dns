@@ -6,6 +6,11 @@ variable "name" {
   type = string
 }
 
+variable "description" {
+  type    = string
+  default = "Override DNS entries for Google APIs access"
+}
+
 variable "overrides" {
   type = list(string)
   default = [
@@ -22,4 +27,13 @@ variable "labels" {
 variable "use_private_access_endpoints" {
   type    = bool
   default = false
+}
+
+variable "addresses" {
+  type = object({
+    ipv4 = set(string)
+    ipv6 = set(string)
+  })
+  nullable = true
+  default  = null
 }

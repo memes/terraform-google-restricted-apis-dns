@@ -9,6 +9,7 @@ RSpec::Matchers.define :be_a_superset_of do |subset|
   end
 end
 
+# rubocop:disable Metrics/BlockLength
 control 'googleapis' do
   title 'Ensure Cloud DNS zone overriding googleapis.com meets expectations'
   impact 1.0
@@ -16,15 +17,16 @@ control 'googleapis' do
   project = input('input_project_id')
   network_self_links = JSON.parse(input('output_network_self_links_json'), { symbolize_names: false }).sort
   labels = JSON.parse(input('output_labels_json'), { symbolize_names: false })
+  description = input('output_description')
 
-  resource = google_dns_managed_zone(project:, zone: "#{name}-googleapis")
+  resource = google_dns_managed_zone(project:, zone: "#{name}-googleapis-com")
   describe resource do
     it { should exist }
-    its('name') { should cmp "#{name}-googleapis" }
-    its('description') { should cmp 'Override googleapis.com domain to use restricted.googleapis.com endpoints' }
+    its('name') { should cmp "#{name}-googleapis-com" }
+    its('description') { should cmp description }
     its('dns_name') { should cmp 'googleapis.com.' }
     its('visibility') { should cmp 'private' }
-    its('labels') { should be_a_superset_of(labels) }
+    its('labels') { should be_a_superset_of(labels) } unless labels.nil?
     its('private_visibility_config') { should_not be_nil }
     if network_self_links.count.positive?
       describe resource.private_visibility_config.networks.map(&:network_url).sort do
@@ -37,6 +39,7 @@ control 'googleapis' do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 # rubocop:disable Metrics/BlockLength
 control 'overrides' do
@@ -44,12 +47,13 @@ control 'overrides' do
   impact 1.0
   name = input('input_name')
   project = input('input_project_id')
+  description = input('output_description')
   overrides = JSON.parse(input('output_overrides_json'), { symbolize_names: false })
   network_self_links = JSON.parse(input('output_network_self_links_json'), { symbolize_names: false }).sort
   labels = JSON.parse(input('output_labels_json'), { symbolize_names: false })
 
   only_if('No override zones specified') do
-    !overrides.empty?
+    !(overrides.nil? || overrides.empty?)
   end
 
   zones = overrides.map do |n|
@@ -59,10 +63,10 @@ control 'overrides' do
     resource = google_dns_managed_zone(project:, zone:)
     describe resource do
       it { should exist }
-      its('description') { should cmp "Override #{domain} domain to use restricted.googleapis.com private endpoints" }
+      its('description') { should cmp description }
       its('dns_name') { should cmp "#{domain}." }
       its('visibility') { should cmp 'private' }
-      its('labels') { should be_a_superset_of(labels) }
+      its('labels') { should be_a_superset_of(labels) } unless labels.nil?
       its('private_visibility_config') { should_not be_nil }
       if network_self_links.count.positive?
         describe resource.private_visibility_config.networks.map(&:network_url).sort do

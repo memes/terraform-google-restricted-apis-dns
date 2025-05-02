@@ -20,6 +20,8 @@
         "markdownlint",
         "opencontainers",
         "pastebin",
+        "rrdatas",
+        "subnetworks",
         "thumbsup",
         "trimpath",
         "venv",
@@ -29,5 +31,9 @@
     ],
     "flagWords": [
         "hte"
+    ],
+    "ignorePaths": [
+        ".devcontainer/devcontainer.json",
+        "Gemfile"
     ]
 }
