@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.3.0...v2.0.0) (2025-06-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* The module has changed minimal requirements for terraform/tofu version to 1.5+ and Google provider to 6.0+.
+
+### Features
+
+* Add support for custom A/AAAA addresses ([d4c88ce](https://github.com/memes/terraform-google-restricted-apis-dns/commit/d4c88ce63a6e3dcb9e5051bbd3bf895edf93cf84))
+
 ## [1.3.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.2.0...v1.3.0) (2023-12-07)
 
 
