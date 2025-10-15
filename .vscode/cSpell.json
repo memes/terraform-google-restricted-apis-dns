@@ -22,6 +22,7 @@
         "pastebin",
         "rrdatas",
         "subnetworks",
+        "tflint",
         "thumbsup",
         "trimpath",
         "venv",
@@ -34,6 +35,8 @@
     ],
     "ignorePaths": [
         ".devcontainer/devcontainer.json",
-        "Gemfile"
+        ".gitignore",
+        ".pre-commit-config.yaml",
+        "uv.lock"
     ]
 }
