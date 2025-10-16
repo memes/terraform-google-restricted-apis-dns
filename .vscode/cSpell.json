@@ -12,6 +12,7 @@
         "gofumpt",
         "golangci",
         "gomod",
+        "googleapiclient",
         "goreleaser",
         "hadolint",
         "hashicorp",
@@ -20,8 +21,12 @@
         "markdownlint",
         "opencontainers",
         "pastebin",
+        "pytest",
         "rrdatas",
         "subnetworks",
+        "tflint",
+        "tfvar",
+        "tfvars",
         "thumbsup",
         "trimpath",
         "venv",
@@ -34,6 +39,8 @@
     ],
     "ignorePaths": [
         ".devcontainer/devcontainer.json",
-        "Gemfile"
+        ".gitignore",
+        ".pre-commit-config.yaml",
+        "uv.lock"
     ]
 }

@@ -11,6 +11,8 @@ for this workflow, which should be linked with an issue for tracking purposes.
 A GitHub action will be run against your PR to ensure code standards have been
 applied.
 
+> NOTE: The devcontainer in this repo contains the pre-commit and supporting tools by default.
+
 [pre-commit] is used to ensure that all files have consistent formatting and to
 avoid committing secrets.
 
@@ -22,15 +24,15 @@ avoid committing secrets.
    E.g.
 
    ```shell
-   pip install -r requirements-dev.txt
-   pre-commit install --hook-type commit-msg --hook-type pre-commit
+   uv sync --all-extras --all-packages
+   uv run pre-commit install --hook-type commit-msg --hook-type pre-commit
    ```
 
 4. Create a new branch for changes
-5. Execute `kitchen` tests to validate changes
+5. Execute `pytest` tests to validate changes
 
    ```shell
-   kitchen test
+   uv run pytest -v
    ```
 
 6. Commit and push changes for PR
