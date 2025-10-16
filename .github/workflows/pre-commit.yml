@@ -22,7 +22,7 @@ jobs:
       TALISMAN_VERSION: 1.37.0
       TFDOCS_VERSION: 0.20.0
       TFLINT_VERSION: 0.59.1
-      TOFU_VERSION: 1.10.5
+      TOFU_VERSION: 1.10.6
     steps:
       - uses: actions/checkout@v5
       - name: install talisman

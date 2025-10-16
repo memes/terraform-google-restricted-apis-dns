@@ -24,6 +24,11 @@ variable "labels" {
   default = {}
 }
 
+variable "network_self_links" {
+  type     = list(string)
+  nullable = true
+}
+
 variable "use_private_access_endpoints" {
   type    = bool
   default = false

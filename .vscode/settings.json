@@ -13,5 +13,8 @@
         }
     },
     "python.languageServer": "Pylance",
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "todo-tree.filtering.excludeGlobs": [
+        "**/.venv/*/**"
+    ]
 }
