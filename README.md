@@ -45,7 +45,7 @@ Google Cloud API endpoints to the `restricted.googleapis.com` or
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "2.0.0"
+    version = ">= 2.0.0"
     project_id = "my-project-id"
     network_self_links = [
         "projects/my-project-id/globals/network/my-network",
@@ -66,7 +66,7 @@ module "restricted_apis" {
 ```hcl
 module "restricted_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "2.0.0"
+    version = ">= 2.0.0"
     project_id = "my-project-id"
     overrides = []
     network_self_links = [
@@ -88,7 +88,7 @@ module "restricted_apis" {
 ```hcl
 module "private_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "2.0.0"
+    version = ">= 2.0.0"
     project_id = "my-project-id"
     use_private_access_endpoints = true
     network_self_links = [
@@ -111,7 +111,7 @@ module "private_apis" {
 ```hcl
 module "private_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "2.0.0"
+    version = ">= 2.0.0"
     project_id = "my-project-id"
     use_private_access_endpoints = true
     overrides = [
@@ -138,7 +138,7 @@ module "private_apis" {
 ```hcl
 module "private_apis" {
     source  = "memes/restricted-apis-dns/google"
-    version = "2.0.0"
+    version = ">= 2.0.0"
     project_id = "my-project-id"
     addresses = [
         ipv4 = ["10.10.10.10"],
