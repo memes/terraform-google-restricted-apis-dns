@@ -38,12 +38,14 @@ variable "overrides" {
   type = list(string)
   default = [
     "gcr.io",
+    "gke.goog",
     "pkg.dev",
   ]
   description = <<-EOD
   A list of additional Google Cloud endpoint domains that should be forced to
   resolve through restricted.googleapis.com. These must be compatible with VPC
-  Service Controls. Default value will allow restricted access to GCR and GAR.
+  Service Controls. Default value will allow restricted access to GCR, GAR,
+  and to GKE DNS endpoints in `gke.goog`.
   EOD
 }
 
