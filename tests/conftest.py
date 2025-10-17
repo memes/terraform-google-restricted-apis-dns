@@ -1,8 +1,10 @@
 """Common testing fixtures."""
 
+import ipaddress
 import json
 import os
 import pathlib
+import re
 import subprocess
 import tempfile
 from collections import Counter
@@ -23,11 +25,15 @@ DEFAULT_LABELS = {
 }
 DEFAULT_REGION = "us-west1"
 EXPECTED_DESCRIPTION = "Override DNS entries for Google APIs access"
-EXPECTED_DNS_ZONES = [
-    "googleapis.com.",
-    "gcr.io.",
-    "pkg.dev.",
+EXPECTED_ALWAYS_DNS_ZONES = [
+    "googleapis.com",
 ]
+EXPECTED_OVERRIDES_DNS_ZONES = [
+    "gcr.io",
+    "gke.goog",
+    "pkg.dev",
+]
+EXPECTED_DNS_ZONES = EXPECTED_ALWAYS_DNS_ZONES + EXPECTED_OVERRIDES_DNS_ZONES
 EXPECTED_VISIBILITY = "private"
 EXPECTED_TTL = 300
 EXPECTED_RESTRICTED_A_RRS = [
@@ -92,21 +98,6 @@ def labels() -> dict[str, str]:
     if not raw:
         return DEFAULT_LABELS
     return DEFAULT_LABELS | dict([x.split(":") for x in raw.split(",")])
-
-
-@pytest.fixture(scope="session")
-def region() -> str:
-    """Return the Compute Engine region to use for tests.
-
-    Preference will be given to the environment variables TEST_GOOGLE_REGION with fallback to 'us-west1'.
-    """
-    region = os.getenv("TEST_GOOGLE_REGION", DEFAULT_REGION)
-    if region:
-        region = region.strip()
-    if not region:
-        region = DEFAULT_REGION
-    assert region
-    return region
 
 
 @pytest.fixture(scope="session")
@@ -299,6 +290,8 @@ def managed_zone_asserter(
         expected_network_self_links: list[str] | None = None,
     ) -> None:
         """Raise an AssertionError if Cloud DNS managed zone for DNS domain does not match expectations."""
+        if dns_zone[-1] != ".":
+            dns_zone = f"{dns_zone}."
         if expected_description is None:
             expected_description = EXPECTED_DESCRIPTION
         managed_zones = dns_client.managedZones()  # type: ignore[reportAttributeAccessIssue]
@@ -353,6 +346,14 @@ def resource_records_set_asserter(
 ) -> Callable[[str, str, str, list[str] | None], None]:
     """Return a function to assert a resource records set meets expectations."""
 
+    def normalize_rrdata(rrdata: str) -> str:
+        """Normalize the rrdata by adding a trailing period if missing and the value is not a valid IP address."""
+        try:
+            ipaddress.ip_address(rrdata)
+        except ValueError:
+            rrdata = f"{rrdata}." if rrdata[-1] != "." else rrdata
+        return rrdata
+
     def _asserter(
         managed_zone_name: str,
         dns_zone: str,
@@ -360,6 +361,8 @@ def resource_records_set_asserter(
         expected_rrdatas: list[str] | None,
     ) -> None:
         """Raise an error if the Cloud DNS address resource records for the DNS domain matches expectations."""
+        if dns_zone[-1] != ".":
+            dns_zone = f"{dns_zone}."
         resource_records = dns_client.resourceRecordSets()  # type: ignore[reportAttributeAccessIssue]
         request = resource_records.get(
             project=project_id,
@@ -368,6 +371,7 @@ def resource_records_set_asserter(
             type=dns_type,
         )
         if expected_rrdatas is not None and len(expected_rrdatas) > 0:
+            expected_rrdatas = [normalize_rrdata(rrdata) for rrdata in expected_rrdatas]
             result = request.execute()
             assert result is not None
             assert result["ttl"] == EXPECTED_TTL
@@ -379,3 +383,15 @@ def resource_records_set_asserter(
                 request.execute()
 
     return _asserter
+
+
+@pytest.fixture(scope="session")
+def managed_zone_name_builder() -> Callable[[str, str], str]:
+    """Return a builder of managed zone names for a domain."""
+
+    def _builder(fixture_name: str, dns_zone: str) -> str:
+        if dns_zone[-1] == ".":
+            dns_zone = dns_zone[:-1]
+        return f"{fixture_name}-{re.sub(r'[^a-zA-Z0-9]', '-', dns_zone)}"
+
+    return _builder
