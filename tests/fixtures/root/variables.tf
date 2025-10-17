@@ -15,6 +15,7 @@ variable "overrides" {
   type = list(string)
   default = [
     "gcr.io",
+    "gke.goog",
     "pkg.dev",
   ]
 }

@@ -1,7 +1,6 @@
 """Test fixture for Restricted APIs DNS with minimal required values."""
 
 import pathlib
-import re
 from collections.abc import Callable, Generator
 from typing import Any
 
@@ -10,6 +9,7 @@ import pytest
 from .conftest import EXPECTED_DNS_ZONES, EXPECTED_RESTRICTED_A_RRS, EXPECTED_RESTRICTED_AAAA_RRS, run_tofu_in_workspace
 
 FIXTURE_NAME = "minimal"
+FIXTURE_NETWORK_SELF_LINKS = []
 
 
 @pytest.fixture(scope="module")
@@ -31,7 +31,7 @@ def fixture_output(
         tfvars={
             "project_id": project_id,
             "name": fixture_name,
-            "network_self_links": [],
+            "network_self_links": FIXTURE_NETWORK_SELF_LINKS,
         },
     ) as output:
         yield output
@@ -43,26 +43,17 @@ def test_output_values(fixture_output: dict[str, Any]) -> None:
     assert fixture_output == {}
 
 
-@pytest.fixture(scope="module")
-def managed_zone_name_builder(fixture_name: str) -> Callable[[str], str]:
-    """Return a builder of managed zone names for a domain."""
-
-    def _builder(dns_zone: str) -> str:
-        return f"{fixture_name}-{re.sub(r'[^a-zA-Z0-9]', '-', dns_zone[:-1])}"
-
-    return _builder
-
-
 @pytest.mark.parametrize("dns_zone", EXPECTED_DNS_ZONES)
 def test_managed_zone(
     fixture_output: dict[str, Any],  # noqa: ARG001
     managed_zone_asserter: Callable[..., None],
-    managed_zone_name_builder: Callable[[str], str],
+    managed_zone_name_builder: Callable[[str, str], str],
+    fixture_name: str,
     dns_zone: str,
 ) -> None:
     """Verify that the Cloud DNS managed zone for DNS domain matches expectations."""
     managed_zone_asserter(
-        managed_zone_name=managed_zone_name_builder(dns_zone),
+        managed_zone_name=managed_zone_name_builder(fixture_name, dns_zone),
         dns_zone=dns_zone,
     )
 
@@ -71,12 +62,13 @@ def test_managed_zone(
 def test_cname_record_set(
     fixture_output: dict[str, Any],  # noqa: ARG001
     resource_records_set_asserter: Callable[..., None],
-    managed_zone_name_builder: Callable[[str], str],
+    managed_zone_name_builder: Callable[[str, str], str],
+    fixture_name: str,
     dns_zone: str,
 ) -> None:
     """Verify that the Cloud DNS CNAME resource records for the wildcard DNS domain matches expectations."""
     resource_records_set_asserter(
-        managed_zone_name=managed_zone_name_builder(dns_zone),
+        managed_zone_name=managed_zone_name_builder(fixture_name, dns_zone),
         dns_zone=f"*.{dns_zone}",
         dns_type="CNAME",
         expected_rrdatas=[
@@ -93,14 +85,15 @@ def test_cname_record_set(
 def test_address_record_set(
     fixture_output: dict[str, Any],  # noqa: ARG001
     resource_records_set_asserter: Callable[..., None],
-    managed_zone_name_builder: Callable[[str], str],
+    managed_zone_name_builder: Callable[[str, str], str],
+    fixture_name: str,
     dns_zone: str,
     dns_type: str,
     expected_rrdatas: list[str] | None,
 ) -> None:
     """Verify that the Cloud DNS address resource records for the DNS domain matches expectations."""
     resource_records_set_asserter(
-        managed_zone_name=managed_zone_name_builder(dns_zone),
+        managed_zone_name=managed_zone_name_builder(fixture_name, dns_zone),
         dns_zone=dns_zone,
         dns_type=dns_type,
         expected_rrdatas=expected_rrdatas,

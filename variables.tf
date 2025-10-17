@@ -1,5 +1,6 @@
 variable "project_id" {
-  type = string
+  type     = string
+  nullable = false
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]{4,28}[a-z0-9]$", var.project_id))
     error_message = "The project_id variable must must be 6 to 30 lowercase letters, digits, or hyphens; it must start with a letter and cannot end with a hyphen."
@@ -10,7 +11,8 @@ variable "project_id" {
 }
 
 variable "name" {
-  type = string
+  type     = string
+  nullable = false
   validation {
     condition     = can(regex("^[a-z][a-z0-9-]{0,51}$", var.name))
     error_message = "The name variable must be RFC1035 compliant and between 1 and 52 characters in length."
@@ -23,7 +25,8 @@ variable "name" {
 }
 
 variable "description" {
-  type = string
+  type     = string
+  nullable = true
   validation {
     condition     = var.description == null ? true : length(var.description) <= 1024
     error_message = "Description must be a string with at most 1024 characters."
@@ -35,15 +38,22 @@ variable "description" {
 }
 
 variable "overrides" {
-  type = list(string)
+  type     = list(string)
+  nullable = true
+  validation {
+    condition     = var.overrides == null ? true : alltrue([for override in var.overrides : can(regex("^(?:[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\\.)+[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\\.?$", override))])
+    error_message = "Each overrides entry must be a valid DNS domain."
+  }
   default = [
     "gcr.io",
+    "gke.goog",
     "pkg.dev",
   ]
   description = <<-EOD
   A list of additional Google Cloud endpoint domains that should be forced to
   resolve through restricted.googleapis.com. These must be compatible with VPC
-  Service Controls. Default value will allow restricted access to GCR and GAR.
+  Service Controls. Default value will allow restricted access to GCR, GAR,
+  and to GKE DNS endpoints in `gke.goog`.
   EOD
 }
 

@@ -22,6 +22,7 @@
         "opencontainers",
         "pastebin",
         "pytest",
+        "rrdata",
         "rrdatas",
         "subnetworks",
         "tflint",
