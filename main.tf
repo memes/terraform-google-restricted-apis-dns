@@ -9,7 +9,9 @@ terraform {
 }
 
 locals {
-  zones                        = { for z in distinct(concat(["googleapis.com"], var.overrides == null ? [] : var.overrides)) : replace(format("%s-%s", var.name, z), "/[^a-zA-Z0-9]/", "-") => trimsuffix(z, ".") }
+  # Generate a map of managed zone name to dns zone, filtering out any overrides value that is a subdomain of
+  # googleapis.com.
+  zones                        = { for z in distinct(concat(["googleapis.com"], var.overrides == null ? [] : [for override in var.overrides : override if !(endswith(override, "googleapis.com") || endswith(override, "googleapis.com."))])) : replace(format("%s-%s", var.name, trimsuffix(z, ".")), "/[^a-zA-Z0-9]/", "-") => trimsuffix(z, ".") }
   use_private_access_endpoints = try(var.use_private_access_endpoints, false)
   custom_ipv4_addresses        = try(length(var.addresses.ipv4), 0) > 0 ? var.addresses.ipv4 : []
   custom_ipv6_addresses        = try(length(var.addresses.ipv6), 0) > 0 ? var.addresses.ipv6 : []
@@ -65,7 +67,7 @@ resource "google_dns_record_set" "zone_cname" {
   type         = "CNAME"
   ttl          = 300
   rrdatas = [
-    format("%s", each.value.dns_name),
+    each.value.dns_name,
   ]
 
   depends_on = [
