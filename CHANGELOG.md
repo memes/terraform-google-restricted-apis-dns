@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v2.0.0...v2.0.1) (2025-10-17)
+
+
+### Bug Fixes
+
+* Add 'gke.goog' to default overrides set ([f413ff2](https://github.com/memes/terraform-google-restricted-apis-dns/commit/f413ff2c68e8a808bad56b917aaf0211647717a2))
+* Strip domains from overrides if masked ([264eb3b](https://github.com/memes/terraform-google-restricted-apis-dns/commit/264eb3b11f9be88adc821a322163b6976d362b1d))
+
 ## [2.0.0](https://github.com/memes/terraform-google-restricted-apis-dns/compare/v1.3.0...v2.0.0) (2025-06-12)
 
 
