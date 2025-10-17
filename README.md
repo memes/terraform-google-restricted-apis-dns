@@ -15,7 +15,7 @@ Google Cloud API endpoints to the `restricted.googleapis.com` or
   > NOTE: Private connectivity routes to these addresses are not managed by this
   > module; see [multi-region-private-network] for companion module
 * Additional domains are set through the `overrides` variable; by default the
-  `gcr.io` and `pkg.dev` domains for GCR and GAR are included.
+  `gcr.io` and `pkg.dev` domains for GCR, GAR, and GKE DNS endpoints are included.
 
 ## Opinions
 
@@ -38,6 +38,7 @@ Google Cloud API endpoints to the `restricted.googleapis.com` or
 |----|-----------------|-----------|
 |Override googleapis.com|&check;|Always directed to `restricted.googleapis.com`|
 |Override gcr.io|&check;|Default `overrides` value will direct to `restricted.googleapis.com`|
+|Override gke.goog|&check;|Default `overrides` value will direct to `restricted.googleapis.com`|
 |Override pkg.dev|&check;|Default `overrides` value will direct to `restricted.googleapis.com`|
 |Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
 |Route to private endpoints||Must be managed per-VPC|
@@ -53,12 +54,13 @@ module "restricted_apis" {
 }
 ```
 
-### Disable restricted override for Container Registry and Artifact Registry
+### Disable restricted override for Container Registry, Artifact Registry and GKE DNS endpoints
 
 |Item|Managed by module|Description|
 |----|-----------------|-----------|
 |Override googleapis.com|&check;|Always directed to `restricted.googleapis.com`|
 |Override gcr.io||Setting `overrides` to []|
+|Override gke.goog||Setting `overrides` to []|
 |Override pkg.dev||Setting `overrides` to []|
 |Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
 |Route to private endpoints||Must be managed per-VPC|
@@ -81,6 +83,7 @@ module "restricted_apis" {
 |----|-----------------|-----------|
 |Override googleapis.com|&check;|Always directed to `private.googleapis.com`|
 |Override gcr.io|&check;|Default `overrides` value will direct to `private.googleapis.com`|
+|Override gke.goog|&check;|Default `overrides` value will direct to `private.googleapis.com`|
 |Override pkg.dev|&check;|Default `overrides` value will direct to `private.googleapis.com`|
 |Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
 |Route to private endpoints||Must be managed per-VPC|
@@ -103,6 +106,7 @@ module "private_apis" {
 |----|-----------------|-----------|
 |Override googleapis.com|&check;|Always directed to `private.googleapis.com`|
 |Override gcr.io|&check;|Explicit `overrides` value will direct to `private.googleapis.com`|
+|Override gke.goog|&check;|Explicit `overrides` value will direct to `private.googleapis.com`|
 |Override pkg.dev|&check;|Explicit `overrides` value will direct to `private.googleapis.com`|
 |Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
 |Route to private endpoints||Must be managed per-VPC|
@@ -116,6 +120,7 @@ module "private_apis" {
     use_private_access_endpoints = true
     overrides = [
         "gcr.io",
+        "gke.goog",
         "pkg.dev",
         "cloudfunctions.net",
     ]
@@ -131,6 +136,7 @@ module "private_apis" {
 |----|-----------------|-----------|
 |Override googleapis.com|&check;|`10.10.10.10`|
 |Override gcr.io|&check;|Default `overrides` value will direct to `10.10.10.10`|
+|Override gke.goog|&check;|Default `overrides` value will direct to `10.10.10.10`|
 |Override pkg.dev|&check;|Default `overrides` value will direct to `10.10.10.10`|
 |Added to VPC network|&check;|Zones will be added as Private Cloud DNS to any VPC network provided in `network_self_links`|
 |Route to private endpoints||Must be managed per-VPC|
